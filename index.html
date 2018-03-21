@@ -1,13 +1,20 @@
-<!doctype html>
-<html>
+﻿<!doctype html>
+<html lang="en">
+
 	<head>
 		<meta charset="utf-8">
+
+		<title>Vanilla JavaScript</title>
+
+		<meta name="description" content="Some crazy things that don't make sense">
+		<meta name="author" content="Tori Kraft">
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="translucent">
+
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
-		<title>reveal.js</title>
-
 		<link rel="stylesheet" href="css/reveal.css">
-		<link rel="stylesheet" href="css/theme/black.css">
+		<link rel="stylesheet" href="css/theme/black.css" id="theme">
 
 		<!-- Theme used for syntax highlighting of code -->
 		<link rel="stylesheet" href="lib/css/zenburn.css">
@@ -20,30 +27,1091 @@
 			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
 			document.getElementsByTagName( 'head' )[0].appendChild( link );
 		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
 	</head>
+
 	<body>
+
 		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
+				<section>
+					<h1>Vanilla JavaScript</h1>
+					<h3>Or, why does my code do that?</h3>
+					<p>
+						<small>Created by <a href="mailto:queenvkraft@gmail.com">Tori Kraft</a> / Emily Bishop</small>
+					</p>
+				</section>
+
+				<section>
+					<h3>Agenda</h3>
+					<ol>
+						<li>A re-introduction to JavaScript</li>
+						<li>More like OOPs</li>
+                        <li>Scope keeps your code minty fresh</li>	
+                        <li>Achieving closure</li>
+						<li>Questions</li>
+					</ol>
+				</section>
+
+				<section>
+					<h3>Themes</h3>
+					<ul>
+						<li>Things you've heard people say: </li>
+							<ul>
+								<li>
+									what do they actually mean?
+								</li>
+							</ul>
+						<li>What does this code do?</li>
+					</ul>
+				</section>
+
+                <section>
+                <h3>Getting started</h3>
+
+                    <section id="fragments">
+                        Dev tools / F12 in Chrome or Firefox is the easiest way to run some JavaScript
+                        <pre><code class="javascript hljs" data-trim>
+										    > 1 + 2
+									    </code></pre>
+                        <pre class="fragment"><code class="javascript hljs" data-trim>
+										    < 3
+									    </code></pre>
+                    </section>
+                    <section>
+                        This is how you declare and assign that result to a variable
+                        <pre><code class="javascript hljs" data-trim>var x = 1 + 2;</code></pre>
+                        <pre class="fragment"><code class="javascript hljs" data-trim>
+										    < undefined
+									    </code></pre>
+                        <p class="fragment">Result of assignment is by default <em>undefined</em>. You can print a result as a side-effect
+                        <pre class="fragment"><code class="javascript hljs" data-trim>
+										    > console.log(1 + 2);
+								    </code></pre>
+                        <pre class="fragment"><code class="javascript hljs" data-trim>
+										    3
+										    < undefined </code></pre>
+
+                    </section>
+
+                    <section>
+                        Therefore, function declarations need return statements
+                        <pre><code class="javascript hljs" data-trim>f (5);
+function f (x) { 
+    console.log ("Called with " + x); 
+    return x + 1; 
+}</code></pre>
+                        <pre class="fragment"><code class="javascript hljs" data-trim>
+										    Called with 5
+										    < 6
+						</code></pre>
+                        <ul class="fragment"><small>
+                            <li>helpful to think of function declarations as siblings of variable declarations</li>
+                        <li>just as variable declarations should start with <em>var</em>, function declarations must start with <em>function</em></li>
+                        <li>loaded by interpreter before any code is executed</li>
+                        <li>means you can call it sequentially before definition, like this</li>
+</small>
+</ul>
+                    </section>
+
+                    <section>
+                        Finally, a function <em>expression</em> is a variable containing a function
+                        <pre><code class="javascript hljs" data-trim>
+ f (5); //throws an Uncaught TypeError: f is not a function
+ var f = function (x) { 
+    console.log ("Called with " + x); 
+    return x + 1; 
+}</code></pre>
+                        <pre><code class="javascript hljs" data-trim>
+var f = function (x) { //this code needs to run first
+    console.log ("Called with " + x); 
+    return x + 1; 
+}
+f (5); //so this is valid</code></pre>
+                                    <ul><small>
+                            <li>can only be called after the function definition runs</li>
+</small>
+                                    </ul>
+
+                    </section>
+                </section>
+
+				<section>
+					<h3>Summary</h3>
+					<ul>
+						<li>Think of it as the scripting language for web pages</li>
+						<li>Runs in browsers and elsewhere with <a href="https://nodejs.org/en/">Node.js</a></li>
+						<li>Not based on Java at all</li>
+                        <li>Dynamically typed <span class="fragment">... or duck-typed</span></li>
+					</ul>
+					<div class="fragment"><img src="./Images/duck.png"></img></div>
+				</section>
+                <section>
+                    <h3>What are the types?</h3>
+                    <ul>
+                        <li>Number</li>
+                        <li>String</li>
+                        <li>Boolean</li>
+                        <li>Object</li>
+                            <ul>
+                                <li>Function</li>
+                                <li>Array</li>
+                                <li>Date</li>
+                                <li>RegExp</li>
+                            </ul>
+                        <li>Symbol (new in ES6)</li>
+                        <li>... oh and undefined and null</li>
+                    </ul>
+                </section>
+
+				<section>
+					<h3>Types</h3>
+					<p>Write a function that asks the user for a number, then returns the sum of 0... up to that number.</p>
+				</section>
+				<section>
+					<h3>sumTo</h3>
+					<section>
+						<p> What should be returned if the user enters in 2? </p>
+					<pre><code class="javascript hljs" data-trim>
+									 function sumTo () { 
+										 var x = prompt("Please enter a number"); 
+										 for (var i = 0, sum = 0; i < x + 1; i++) { 
+											 //debugging: console.log(i);
+									 		sum +=i ; 
+										} 
+										return sum; 
+									} 
+									sumTo();
+								</code></pre>
+					</section>
+					<section>
+						<pre><code class="javascript hljs" data-trim>
+										 >210
+							</code></pre>
+						<div>
+							<img style="border:0px" data-src=".\Images\confounded.png"></img>
+						</div>
+						
+					</section>
+					<aside class="notes">
+						 https://repl.it/languages/javascript
+					</aside>
+				</section>
+
+				<section>
+					<h3>JS, oh so trusting</h3>
+					<section>
+						<pre><code class="javascript hljs" data-trim>
+									 function sumTo () { 
+										 var x = Number(prompt("Please enter a number")); 
+										 for (var i = 0, sum = 0; i < x + 1; i++) { 
+											 //debugging: console.log(i);
+									 		sum +=i ; 
+										} 
+										return sum; 
+									} 
+									sumTo();
+								</code></pre>
+					</section>
+					<section>
+						<pre><code class="javascript hljs" data-trim>
+										 >3
+							</code></pre>
+                        <div href="#">
+							<img style="border:0px" data-src=".\Images\joy.png"></img>
+						</div>
+						<!--<a href="#">
+							<img style="border:0px" data-src=".\Images\confounded.png"></img>
+						</a>-->
+
+					</section>
+				</section>
+
+                <section>
+                    <h3>Other common type errors</h3>
+                    <pre><code class="javascript hljs" data-trim>
+                        0.2 + 0.1 == 0.30000000000000004;
+                    </code></pre>
+                    <ul>
+                        <li class="fragment">Numbers are "double-precision 64-bit floating point values"</li>
+                        <li class="fragment">Solution: don't use non-integer math in JS if at all possible</li>
+                    <pre class="fragment"><code class="javascript hljs" data-trim>
+                        (0.2 * 10 + 0.1 * 10) / 10 == 0.3; //this works for 0.1
+                    </code></pre>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>More common type errors</h3>
+                    <pre><code class="javascript hljs" data-trim>
+                        1 == "1"
+                    </code></pre>
+                    <ul>
+                    <li class="fragment">== checks for "loose/abstract equality"</li>
+                    <li class="fragment">Can use ===, checks type equality too</li>
+                	</ul>
+                    <pre><code class="fragment javascript hljs" data-trim>
+if (value) {
+  // value is truthy
+}
+else {
+  // value is falsy
+  // it could be false, 0, '', null, undefined or NaN
+}
+					</code></pre>
+                </section>
+
+                <section>
+                	<h3>Objects in JS</h3>
+                	<p>can be thought of as simple collections of name-value pairs</p>
+                	<pre><code class="fragment javascript hljs" data-trim>
+                		var closet = {
+                			name: "Emily's closet",
+                			shoes: ["sneakers", "flats", "heels", "boots"],
+                			dressNum: 10,
+                			walkIn: true
+                		}
+                	</code></pre>
+                	<pre><code class="fragment javascript hljs" data-trim>
+                		closet.dressNum = 11;
+                	</code></pre>
+                </section>
+
+				<section>
+					<h3>What is object-oriented programming?</h3>
+					<ul>
+						<li class="fragment">A programming methodology based on objects, instead of functions & procedures</li>
+						<li class="fragment">Similar objects are grouped into classes</li>
+						<li class="fragment">An "object" refers to a specific "instance" of a class</li>
+						<li class="fragment">Each object has a structure similar to other objects in the class, but can be assigned individual characteristics/values</li>
+					</ul>
+				</section>
+
+				<section>
+                    <h3>OOPS</h3>
+					<div>
+							<img style="border:0px" data-src=".\Images\OOP.jpg"></img>
+						</div>
+				</section>
+
+				<section>
+					<h3>Prototypes</h3>
+					<div>
+						<img style="border:0px" data-src=".\Images\prototype.PNG"></img>
+					</div>
+				</section>
+
+                <section>
+                    <h3>Along with objects, functions are the core component in understanding JavaScript.</h3>
+                </section>
+
+				<section>
+					<h3>Things people say</h3>
+					<blockquote >
+						&ldquo;Functions in JavaScript are first-class citizens&rdquo;
+					</blockquote>
+					<div class=fragment>
+							<img style="border:0px" data-src=".\Images\firstClass.png"></img>
+						</div>
+				</section>
+
+				<section>
+					<h3>What does that mean?</h3>
+					<h4>A function can:</h4>
+					<ul>
+						<li>Be passed as an argument to another function</li>
+						<li>Be returned from a function</li>
+						<li>Be stored in data structures</li>
+						<li>Have properties and methods just like any other object.</li>
+					</ul>
+				</section>
+
+				<section>
+					<h3>Seriously?</h3>
+					<p>
+						Yep.
+					</p>
+				</section>
+                
+                <section>
+                    <h3>What's an example of using a function's properties?</h3>
+                    <section>
+                        <pre><code class="javascript hljs" data-trim>
+                        function add(x, y) {
+                            return x + y;
+                        }
+                        add(2, 3); //returns 5</code></pre>
+                        <pre><code class="javascript hljs fragment" data-trim>
+                        add(); //returns NaN
+                        //calling a function without passing the parameters it expects
+                        //sets the parameters of the function to undefined
+                    </code></pre>
+                        <pre><code class="javascript hljs fragment" data-trim>
+                        add(2, 3, 4); //returns 5
+                        //you can pass in more arguments than the function was expecting
+                        //4 was ignored
+                    </code></pre>
+                    </section>
+                    <section>
+                        <pre><code class="javascript hljs" data-trim>
+                            function add() {
+                                var sum = 0;
+                                for (var i = 0, j = arguments.length; i < j; i++) {
+                                sum += arguments[i];
+                                }
+                                return sum;
+                            }
+
+                            add(2, 3, 4, 5); // 14
+                    </code></pre>
+                        <aside class="fragment">Functions have access to a local variable called <em>arguments</em>,
+                        which is an array-like object holding all of the values passed to the function</aside>
+                    </section>
+                </section>
+
+                <section>
+                    <h3>How about an example of passing a function as a parameter to another function?</h3>
+                </section>
+
+                <section>
+                    <h3>Don't call it a comeback: it's a callback</h3>
+                    <blockquote>A function passed into another function as an argument, which is then invoked inside the outer function
+                        to complete some kind of routine or action</blockquote>
+
+                </section>
+
+                <section>
+                    <h3>What's that</h3>
+                    <pre class="fragment"><code class="hljs javascript">function formalGreeting(name) {
+  alert('Good day ' + name);
+}
+
+function casualGreeting(name) {
+  alert('Hey ' + name);
+}
+
+function processUserInput(callback) {
+  var name = prompt('Please enter your name.');
+  callback(name);
+}
+
+processUserInput(formalGreeting);
+processUserInput(casualGreeting);</code></pre>
+                </section>
+
+                <section>
+                    <h3>Things people say:</h3>
+                    <blockquote>&ldquo;JavaScript is all about callbacks&rdquo;</blockquote>
+                </section>
+
+                <section>
+                    <h3>Why callbacks are so strongly associated with JS</h3>
+                    <section>
+                        <p>Where do we run JS, typically?</p>
+                        <p class="fragment">The web. </p>
+                        <ul>
+<li class="fragment">A lot of the code in front-end JS is event-based. </li>
+<li class="fragment">The user triggers an action, which is associated with a behavior that we the coder define. </li>
+<li class="fragment">Our code is generally attached as a callback: a single function executed in response to the event.</li>
+                        </ul>
+                        
+                    </section>
+                    <section>
+                        <h4>Common callback e.g.</h4>
+                        <pre><code class="hljs javascript">
+$('#buttonId').click(function() {
+  alert('thanks for clicking this button!');
+  //oh yeah and some actual code to add to order or whatever
+});
+                        </code></pre>
+                    </section>
+
+                </section>
+
+                <section>
+                    <h3>Time for an concept essential to programming in general, but IMO especially JS:</h3>
+					<div class="fragment">
+						<img style="border:0px" data-src=".\Images\scope.png"></img>
+					</div>
+                </section>
+
+				<section>
+					<h3>Scope, what's that?</h3>
+					<blockquote>
+						 &ldquo;In computer programming, the scope of a name binding – an association of a name to an entity, such as a variable – is the
+						region of a computer program where the binding is valid: where the name can be used to refer to the entity... In other parts of the program the name may refer to a different entity (it
+						may have a different binding), or to nothing at all (it may be unbound).&rdquo;
+					</blockquote>
+					<p><small>Thanks <a href=https://en.wikipedia.org/wiki/Scope_(computer_science)>Wikipedia</a></small></p>
+				</section>
+
+                <section>
+                    <h3>Scope</h3>
+                    <ul>
+                        <li>Unlike most languages, in which scope is block-oriented...</li>
+                        <li>Scope in JS is <em>function</em> oriented</li>
+                        
+                        <li>This means a variable belongs to the closest function it's in... 
+                        and if it's in no function, it belongs to the global scope.</li>
+                    </ul>
+                    <div class="fragment">
+                        <img style="border:0px" data-src=".\Images\scream.png"></img>
+                    </div>
+                </section>
+
+                <section>
+                    <h3>Scope: What this means for JS</h3>
+                    <ul><small>
+                        <li class="fragment">in JS, variables are created when a function runs and deleted when a function is completed</li>
+                        <li class="fragment">in HTML, the global scope is the window object</li>
+                        <li class="fragment">all global variables belong to the window object</li>
+                        <li class="fragment">a global variable is only deleted when you close the browser window</li>
+                        <li class="fragment">
+                            chances are good you get unlucky with other people (or even the global scope, the window object)
+                            trying to use the same name as your global variable
+                        </li>
+                        <li class="fragment">it kinda sucks if your variables don't mean what you think they mean</li>
+                    </small></ul>
+                    <div class="fragment"><img src=".\Images\inigo.png"></img></div>
+                </section>
+
+                <section>
+                    <h3>Scope TLDR;</h3>
+                    Forget what your mama told you... don't share unless you absolutely have to!
+                    <p class="fragment">
+                        To be clear: try to limit the scope of your variables and functions to the bare minimum.
+                    </p>
+                </section>
+
+                <section>
+                    <h3>Example of how to limit scope</h3>
+                    <pre><code class="javascript hljs" data-trim>
+                        function parentFunc() {
+                            var a = 1;
+
+                            function nestedFunc() {
+                                var b = 4;
+                                return a + b;
+                            }
+
+                            return nestedFunc(); //returns 5
+                        }
+                    </code></pre>
+                    <ul>
+                    <li class="fragment">
+                        Nested functions can access variables in their parent function's scope.
+                    </li>
+                    <li class="fragment">Use this mechanism to couple functions that are used together without polluting your global namespace
+                    </li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Scope in JS</h3>
+                    <h4>Three key rules</h4>
+                    <ul>
+                        <li><em>var</em> declares new variable for function or global scope</li>
+                        <li>function scanned to find <em>var</em> declarations</li>
+                        <li>read of a <em>var</em> before assignment gives <em>undefined</em></li>
+                    </ul>
+                </section>
+
+				<section>
+					
+					<h3>Scope in JS</h3>
+
+					<section>
+						<p>In the following code, what gets printed to the console?</p>
+						<p><small>(Assume that the cache is cleared between each of the following examples)</small></p>
+					</section>
+
+					<section>
+						<pre><code class="javascript hljs" data-trim>
+								 var x;
+								 console.log(x);
+							</code></pre>
+						<pre class="fragment"><code class="javascript hljs" data-trim>
+								 undefined
+							</code></pre>
+					</section>
+						
+					<section>
+						<pre><code class="javascript hljs" data-trim>
+								 var x = "a"; 
+								 console.log (x); 
+								 x = x + "b"; 
+								 console.log (x);
+							</code></pre>
+						<pre class="fragment"><code class="javascript hljs" data-trim>
+								 a
+								 ab
+							</code></pre>
+					</section>
+
+					<section>
+						<pre><code class="javascript hljs" data-trim>
+								 console.log (x); 
+								 x = x + "b"; 
+								 console.log (x); 
+								 var x = "a"; 
+								 console.log (x);
+							</code></pre>
+						<pre class="fragment"><code class="javascript hljs" data-trim>
+								 undefined
+								 undefinedb
+								 a
+							</code></pre>
+					</section>
+
+					<section>
+						<pre><code class="javascript hljs" data-trim>
+								 var x = "a";
+								 function f () { 
+									 console.log (x); 
+									 x = x + "b"; 
+									 console.log (x); 
+								} 
+								f ();
+							</code></pre>
+						<pre class="fragment"><code class="javascript hljs" data-trim>
+								 a
+								 ab
+							</code>Global scope</pre>
+
+					</section>
+
+					<section>
+						<pre><code class="javascript hljs" data-trim>
+								 var x = "a";
+								 function f () { 
+									 console.log (x); 
+									 x = x + "b"; 
+									 console.log (x); 
+									 var x = "c"; 
+								 	 console.log (x); 
+								} 
+								f ();
+							</code></pre>
+						<pre class="fragment"><code class="javascript hljs" data-trim>
+								 undefined
+								 undefinedb
+								 c
+							</code>lolwut</pre>
+						<p class="fragment"><small>This is called hoisting and it's hella confusing</small></p>
+					</section>
+
+                    <section>
+                        <div>
+                            <img data-src=".\Images\hoisting.gif" width="480" height="270" />
+                        </div>
+                    </section>
+
+					<!--<section>
+						<pre>
+							<code class="javascript hljs" data-trim>
+								 var x = "a"; 
+								 function f () { 
+									 console.log (x); 
+									 x = x + "b"; 
+									 console.log (x); 
+									 if (false) { 
+										 var x = "c"; 
+									 } 
+									 console.log (x);
+								}
+								f ();
+							</code>
+						</pre>
+						<pre class="fragment">
+							<code class="javascript hljs" data-trim>
+								undefined
+								undefinedb
+								undefinedb
+							</code>
+						</pre>
+					</section>-->
+
+					<section>
+						<pre><code class="javascript hljs" data-trim>
+								 var x = "a"; 
+								 function f () { 
+									console.log (x); 
+									x = x + "b"; 
+									console.log (x); 
+									(function () { 
+										 var x = "c"; 
+										 console.log (x);
+									}) (); 
+									console.log (x); 
+								} 
+								f ();
+							</code></pre>
+						<pre class="fragment"><code class="javascript hljs" data-trim>
+								a
+								ab
+								c
+								ab
+							</code><p>One way of solving the hoisting problem is through anonymous functions</p></pre>
+
+					</section>
+
+                    <section>
+                        <h4>Anonymous function: </h4>
+                        <pre><code class="javascript hljs" data-ng-trim>
+                            (function () {
+                            var x = "c";
+                            console.log (x);
+                            }) ();
+                        </code></pre>           
+                        just a function without a name.
+						<p><small>Jargon tip: the anonymous function here is sometimes called
+                        an IIFE, or Immediately Invoked Function Expression</small></p>
+                    </section>
+
+					<section>
+						<pre><code class="javascript hljs" data-trim>
+								var x = "a"; 
+								function f () { 
+									console.log (x); 
+									x = x + "b"; 
+									console.log (x); 
+									{ let x = "c"; 
+									  console.log (x);
+									} 
+									console.log (x); 
+								} 
+								f ();
+							</code></pre>
+						<pre class="fragment"><code class="javascript hljs" data-trim>
+								a
+								ab
+								c
+								ab
+							</code><p>A more modern way: ES6 <em>let</em></p></pre>
+
+					</section>
+
+					<!--<section>
+						<br>
+						<p>Another crazy example</p>
+						<pre>
+							<code class="javascript hljs" data-trim>
+								var a = 1; 
+								function f () { 
+									console.log ("f1: a = " + a); 
+									var a = 2; 
+									console.log ("f2: a = " + a); 
+								} 
+								console.log ("1:  a = " + a); 
+								f (); 
+								console.log ("2:  a = " + a);
+							</code>
+						</pre>
+						<pre class="fragment">
+							<code class="javascript hljs" data-trim>
+								1:  a = 1
+								f1: a = undefined
+								f2: a = 2
+								2:  a = 1
+							</code>
+							
+						</pre>
+					</section>-->
+
+
+					
+
+				</section>
+
+                <section>
+                    <h3>Some War Stories</h3>
+                    What happens if you <em>never</em> var something?
+                    <p class="fragment">Why it's automatically global scope of course</p>
+                </section>
+
+
+                <section>
+                    <h3>How to Determine what scope you want</h3>
+                    <ul>
+                        <li>
+                            Who needs to access this function and when?
+                        </li>
+                    </ul>
+                </section>
+
+				<section>
+					<h3>How can we use scope to make this safe?</h3>
+
+					<pre><code class="hljs javascript">var counter = 0; //global scope
+
+function add() {
+    counter += 1;
+}
+
+add();
+add();
+add(); //counter is now 3
+</pre>
+					</code>
+
+					<pre class="fragment"><code class="hljs javascript">function someOtherFunction() {
+    counter = "evil laugh";
+}
+
+someOtherFunction(); //counter is now "evil laugh"
+
+add(); //counter is now "evil laugh1"
+</pre>
+					</code>
+				</section>
+
+				<section>
+					<h3>Really we only want add to touch counter</h3>
+					<pre><code class="hljs javascript">function add() {
+    var counter = 0;
+    counter += 1;
+}
+
+add();
+add();
+add();
+
+// the counter should now be 3, 
+//but every time we call add, we re-initalize counter to 1</pre>
+					</code>
+				</section>
+
+				<section>
+					<h3>Nested functions to the rescue!</h3>
+					<pre><code class="hljs javascript">function add() {
+    var counter = 0;
+    function plus() {counter += 1;}
+    plus();    
+    return counter; 
+}
+
+add();
+add();
+add(); //still 1
+</code></pre>
+<ul><small>
+    <li class="fragment">... nope, we can't access plus outside add()</li>
+    <li class="fragment">... and we need to make sure counter is set to 0 only once</li>
+</small></ul>
+				</section>
+
+                <section>
+                    <h3>
+                         We need some closure:
+                    </h3>
+                    <blockquote class="fragment">the combination of a function and the scope object in which it was created</blockquote>
+                </section>
+
+				<section>
+					<h3>Closure</h3>
+					<pre><code>var add = function () {
+    var counter = 0;
+    return function () {return counter += 1;} 
+}();
+
+add; //prints ƒ () {return counter += 1;}
+
+//actually invoke add
+add();
+add();
+add();
+
+// the counter is now 3
+</code></pre>
+					<ul><small>
+<li class="fragment">add is assigned the return value of a self-invoking function </li>
+<li class="fragment">the  self-invoking function runs once, sets counter to 0, and returns an anonymous function</li>
+<li class="fragment">the inner function can access the variable counter in the parent scope</li>
+<li class="fragment">A closure is a function having access to the parent scope, even after the parent function has closed.</li>
+</small></ul>
+				</section>
+
+				<section>
+					<h3>Makin sure you got that</h3>
+					<blockquote>A <em>closure</em> is a function having access to the parent scope, even after the parent function has closed.</blockquote>
+				</section>
+
+                <section>
+                    <h3>Some War Stories</h3>
+                    <small><p>It seems like anonymous functions are the answer to everything</p>
+                    <p class="fragment">That is true... </p>
+                    <p class="fragment">...as long as you don't need to invoke the function by name. Why? Because it's anonymous and has no name</p>
+                    </small>
+                    <div class="fragment"><img src="./Images/jaqen.png"></img></div>
+                </section>
+
+				
+                <!--<section>
+                    <h3>...Basically the same as inner functions</h3>
+                    <pre><code class="hljs javascript" data-trim>
+                         function makeAdder(a) {
+                          return function(b) {
+                            return a + b;
+                          };
+                        }
+                        var x = makeAdder(5);
+                        var y = makeAdder(20);
+                        x(6); // returns 11
+                        y(7); // returns 27
+                    </code></pre>
+                    <p class="fragment">A nested function has access to the outer function's variables</p>
+                    <aside class="fragment">Here's an example of returning a function! Yay!</aside>
+                </section>-->
+
+                <!--<section>
+                    <h3>You might've heard someone call this lexical scoping</h3>
+                    <p class="fragment">That just describes how a parser resolves variable names when functions are nested.
+                    "Lexical" refers to the location where a variable is declared, which the parser refers to
+                    in order to determine where the variable is available.</p>
+                </section>-->
+
+                <!--note>Here's what's actually happening. 
+                Whenever JavaScript executes a function, 
+                a 'scope' object is created to hold the local 
+                variables created within that function. 
+                It is initialized with any variables passed in as 
+                function parameters. This is similar to the 
+                global object that all global variables and 
+                functions live in, but with a couple of important 
+                differences: firstly, a brand new scope object 
+                is created every time a function starts executing, 
+                and secondly, unlike the global object 
+                (which is accessible as this and in browsers 
+                as window) these scope objects cannot be directly
+                accessed from your JavaScript code. 
+                There is no mechanism for iterating over the 
+                properties of the current scope object, for example.
+                </>-->
+
+
+                <section>
+                    <h3>So is JS an object-oriented or a functional programming language?</h3>
+                    <p>
+                        <span class="fragment">Yep.</span><span class="fragment"> (Both) </span>
+                    </p>
+                </section>
+
+				<!--<section>
+					<h3>"I used all the things, and you can too"</h3>
+					SrchSuggWebPart.js:
+					<pre class><code class="javascript hljs" data-trim>
+						var populateCarousel = function(response) {
+							var linkObjs = [];
+
+							for (var i = 0; i < response.SrchSuggColl.length; i++) {
+								var linkObj = createLinkObj(blah blah);	//obv shortened for readability							
+								linkObjs.push(linkObj);
+							}
+
+							CarouselWebMgr.CreateCarousel(linkObjs);
+						};
+					</code></pre>
+				</section>
+
+				<section>
+					<h3>Ok now what</h3>
+					McMaster.UrlMgr.js:
+					<pre>
+						<code class="javascript hljs" data-trim>
+						//search suggestions carousel is triggered by 
+						//SrchSuggWebPart normally
+						//for loading from friendly urls, 
+						//we want to show the srch sugg carousel
+						//as if the user had typed what the friendlyUrlTxt is.
+						//so we do this
+						//it creates the carousel, 
+						//but does nothing else with the response
+						//from SrchSuggWebPart
+						//*******IMPORTANT*******
+						//this works because of scoping, 
+						//do NOT change populateCarousel variable name
+						var populateCarousel;
+						var handler = function() { return populateCarousel; } 
+
+						try {
+							SrchSuggWebPart.SendRequest(friendlyUrlTxt, handler); 
+						} catch (err) {
+							//swallow errors, non-critical
+						}   
+					</code>
+					</pre>
+				</section>-->
+
+				<section>
+					<h3>Resources for moar learning</h3>
+					<h4>(all free online)</h4>
+					<ul>
+						<li><a href="http://eloquentjavascript.net/">Tori's favorite JS ebook</a></li>
+						<li><a href=https://developer.mozilla.org/en-US/docs/Web/JavaScript>Why didn't you read the documentation?</a></li>
+						<li><a href="http://exploringjs.com/">Speaking JS and Exploring ES6</a></li>
+						<li>this <a href="http://courseware.codeschool.com/javascript-roadtrip/js3.pdf">PDF from CodeSchool</a></li>
+                        <li><a href="http://voidcanvas.com/is-javascript-really-interpreted-or-compiled-language/">For some reason I want to know more about JS as compiled or interpreted</a></li>
+                        <li><a href="https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html">Why do floating point errors exist?</a></li>
+                    </ul>
+				</section>
+
+				<section>
+					<h3>Code editors</h3>
+					<ul>
+						<li>console / F12 / developer tools</li>
+						<li><a href="repl.it/languages/javascript">repl.it</a></li>
+						<li>Visual Studio Code</li>
+                        <li>Sublime/Atom</li>
+				</section>
+
+				<section>
+					<h3>Acknowledgements</h3>
+					<ul>
+						<li>Tori's Concepts of Programming Languages course at DePaul (thanks James Riely / Corin Pitcher)</li>
+						<li><a href="http://lab.hakim.se/reveal-js/#">Reveal.js</a></li>
+						<li>Code syntax highlighting courtesy of <a href="http://softwaremaniacs.org/soft/highlight/en/description/">highlight.js</a>.</li>
+                        <li>Google for images and gifs</li>
+                    </ul>
+				</section>
+
+				<!-- Example of nested vertical slides -->
+				<section>
+                    <h3>Bonus materials</h3>
+				</section>
+
+                <section>
+                <h3>Common Scope Problem</h3>
+                <p>Let's make an array of functions that return the numbers 0 through 4</p>
+                <pre><code class="javascript hljs" data-trim>
+var funcs = []; 
+for (var i = 0; i < 5; i++) { 
+  funcs.push (function () { return i; }); 
+} 
+console.log (funcs[0] ()); // prints 5 not 0</code></pre>
+                <p class="fragment"><small>JS allows shared i; rarely what you want</small></p>
+                <p class="fragment"><small>
+    For those of you counting at
+    home, here's an e.g. of both passing a function as
+    an argument to another function (push) and storing
+    it in a data structure (array)
+</small></p>
+                </section>
+
+                <section>
+                    <h3>Common Scope Problem</h3>
+                    <p>How to make a copy of i?</p>
+                    <pre><code class="javascript hljs" data-trim>
+var funcs = []; 
+var x; 
+for (var i = 0; i < 5; i++) { 
+  x = i; // x is shared too! 
+  funcs.push (function () { return x; }); 
+}
+console.log (funcs[0] ()); // prints 5 not 0</code></pre>
+                </section>
+
+                <section>
+                    <h3>Common Scope Problem</h3>
+                    <p>var is not block scope</p>
+                    <pre><code class="javascript hljs" data-trim>
+var funcs = []; 
+for (var i = 0; i < 5; i++) { 
+  var x = i; // x is still shared! 
+  funcs.push (function () { return x; }); 
+}
+console.log (funcs[0] ()); // prints 5 not 0</code></pre>
+                </section>
+
+                <section>
+                    <h3>Common Scope Problem</h3>
+                    <p>i is actually copied in ES6</p>
+                    <pre><code class="javascript hljs" data-trim>
+var funcs = []; 
+for (var i = 0; i < 5; i++) { 
+  let x = i; // copy of i
+  funcs.push (function () { return x; }); 
+}
+console.log (funcs[0] ()); // prints 0</code></pre>
+                </section>
+
+                <section>
+                    <h3>Common Scope Problem</h3>
+                    <p>Pre-ES6 solution: anonymous function</p>
+                    <pre><code class="javascript hljs" data-trim>
+								 var funcs = []; 
+								 for (var i = 0; i < 5; i++) { 
+									 (function () { 
+										 var x = i; 
+										 funcs.push (function () { return x; }); 
+									  }) (); 
+								 }
+								 console.log (funcs[0] ()); // prints 0
+							</code></pre>
+                </section>
+
+                <section>
+                    <h3>Common Scope Problem</h3>
+                    <p>Pre-ES6 solution: named helper function</p>
+                    <pre><code class="javascript hljs" data-trim>
+								 var funcs = []; 
+								 var f = function (x) { 
+									 return function () { return x; } 
+								 }; 
+								 for (var i = 0; i < 5; i++) { 
+									 funcs.push (f (i));
+								 } 
+								 console.log (funcs[0] ()); // prints 0
+					</code></pre>
+                </section>
+
+                <section>
+                    <h3>Mastered this stuff?</h3>
+                    Cool! Try these next:
+                    <ul>
+                        <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions">Arrow functions</a></li>
+                        <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function">async/await</a></li>
+                        <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promises</a></li>
+                        <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode">Strict mode</a>: take the training wheels off</li>
+                        <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Memory_Management">Memory leaks?</a></li>
+                        <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/EventLoop">Concurrency model</a></li>
+                    </ul>
+                </section>
+
 			</div>
+
 		</div>
 
 		<script src="lib/js/head.min.js"></script>
 		<script src="js/reveal.js"></script>
 
 		<script>
-			// More info about config & dependencies:
-			// - https://github.com/hakimel/reveal.js#configuration
-			// - https://github.com/hakimel/reveal.js#dependencies
+
+			// More info https://github.com/hakimel/reveal.js#configuration
 			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
 				dependencies: [
-					{ src: 'plugin/markdown/marked.js' },
-					{ src: 'plugin/markdown/markdown.js' },
-					{ src: 'plugin/notes/notes.js', async: true },
-					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
 				]
 			});
+
 		</script>
+
 	</body>
 </html>
